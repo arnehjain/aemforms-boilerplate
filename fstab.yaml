@@ -1,9 +1,6 @@
 mountpoints:
-  /stage:
+  /:
     url: https://author-p106004-e260955-cmstg.adobeaemcloud.com/bin/franklin.delivery/arnehjain/aemforms-boilerplate/main
     type: "markup"
     suffix: ".html"
-  /prod:
-    url: https://author-p133911-e1313554.adobeaemcloud.com/bin/franklin.delivery/arnehjain/aemforms-boilerplate/main
-    type: "markup"
-    suffix: ".html"
+    
