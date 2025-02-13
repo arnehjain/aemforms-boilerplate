@@ -358,23 +358,40 @@ const observer = new MutationObserver(instrumentForms);
 observer.observe(document, { childList: true, subtree: true, attributeFilter: ['form'] });
 loadCSS(`${window.hlx.codeBasePath}/scripts/form-editor-support.css`);
 
-function enableAuthoringAssistantExtension() {
-  const head = document.getElementsByTagName('head')[0];
-  const meta = document.createElement('meta');
-  meta.name = 'urn:adobe:aue:config:extensions';
+function getAuthoringAssistantUrl() {
   const params = new URLSearchParams(window.location.search);
   const version = params.get('livecycle-authoring-assistant-spa_version');
-  console.log('AEM Forms Authoring Assistant extension version: ', version);
-  if (version) {
-    if (version === 'local') {
-      meta.content = 'https://localhost.corp.adobe.com:8014/dist/universal_editor.html';
-    } else {
-      meta.content = `https://experience.adobe.com/solutions/livecycle-authoring-assistant-spa/static-assets/universal_editor.html?livecycle-authoring-assistant-spa_version=${version}`;
-    }
-  } else {
-    meta.content = 'https://experience-stage.adobe.com/solutions/livecycle-authoring-assistant-spa/static-assets/universal_editor.html';
+  const endpoint = params.get('endpoint');
+
+  console.log('AEM Forms Authoring Assistant extension version:', version);
+
+  if (version === 'local') {
+    return 'https://localhost.corp.adobe.com:8014/dist/universal_editor.html';
   }
-  console.log('Adding meta tag for aem forms authoring assistant extension: ', meta.content);
-  head.appendChild(meta);
+
+  const baseUrl = version
+    ? 'https://experience.adobe.com/solutions/livecycle-authoring-assistant-spa/static-assets/universal_editor.html'
+    : 'https://experience-stage.adobe.com/solutions/livecycle-authoring-assistant-spa/static-assets/universal_editor.html';
+
+  const url = new URL(baseUrl);
+  
+  if (version && version !== 'local') {
+    url.searchParams.append('livecycle-authoring-assistant-spa_version', version);
+  }
+  
+  if (endpoint) {
+    url.searchParams.append('endpoint', endpoint);
+  }
+
+  return url.toString();
+}
+
+function enableAuthoringAssistantExtension() {
+  const meta = document.createElement('meta');
+  meta.name = 'urn:adobe:aue:config:extensions';
+  meta.content = getAuthoringAssistantUrl();
+
+  console.log('Adding meta tag for aem forms authoring assistant extension:', meta.content);
+  document.head.appendChild(meta);
 }
 enableAuthoringAssistantExtension();
