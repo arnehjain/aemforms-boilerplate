@@ -272,8 +272,8 @@ export async function applyChanges(event) {
   const { detail } = event;
 
   const resource = detail?.request?.target?.resource // update, patch components
-      || detail?.request?.target?.container?.resource // update, patch, add to sections
-      || detail?.request?.to?.container?.resource; // move in sections
+    || detail?.request?.target?.container?.resource // update, patch, add to sections
+    || detail?.request?.to?.container?.resource; // move in sections
   if (!resource) return false;
   const updates = detail?.response?.updates;
   if (!updates.length) return false;
@@ -374,11 +374,11 @@ function getAuthoringAssistantUrl() {
     : 'https://experience-stage.adobe.com/solutions/livecycle-authoring-assistant-spa/static-assets/universal_editor.html';
 
   const url = new URL(baseUrl);
-  
+
   if (version && version !== 'local') {
     url.searchParams.append('livecycle-authoring-assistant-spa_version', version);
   }
-  
+
   if (endpoint) {
     url.searchParams.append('endpoint', endpoint);
   }
